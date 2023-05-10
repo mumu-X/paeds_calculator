@@ -127,7 +127,7 @@ class MainScreen(Screen):
     def press(self):
         self.age_in_days = self.calculate_age() 
         if self.age_in_days is None:
-            return  # return early if age_in_days is None
+            return  # return b4 finishing if age_in_days is empty
     
         
         height_input = self.ids.height_input
@@ -151,18 +151,19 @@ class MainScreen(Screen):
         
         print(f'Age: {self.age_in_days}, Height: {height}, Weight: {weight}, Head Circumference: {head_circumference}')
 
+        #if and elif functions for Gumi to edit if he wants it to run. Just change the path to the path of the excel fiels i've sent you use the percentiles one here
         if self.ids.male_button.state == 'down':
              # Call the function to calculate percentile using boy's table
-            h_eight_percentile = calculate_percentile_from_table('C:\\Users\\munya\\Downloads\\lhfa-boys-percentiles-expanded-tables (1).xlsx','lhfa_boys_p_exp', self.age_in_days, 
+            h_eight_percentile = calculate_percentile_from_table('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\New folder\\Who charts\\Boys percentile tables.xlsx','Boys_Length_Age', self.age_in_days, 
                                [0.001, 0.01, 0.03, 0.05, 0.1, 0.15, 0.25, 0.5, 0.75, 0.85, 0.9, 0.95, 0.97, 0.99, 0.999],
                                  height, "h_eight")
-            W_eight_percentile = calculate_percentile_from_table('C:\\Users\\munya\\Downloads\\Who boys percentile charts\\wfa-boys-percentiles-expanded-tables.xlsx','wfa_boys_p_exp',  self.age_in_days,
+            W_eight_percentile = calculate_percentile_from_table('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\New folder\\Who charts\\Boys percentile tables.xlsx','Boys_Weight_Age',  self.age_in_days,
                                 [0.001, 0.01, 0.03, 0.05, 0.1, 0.15, 0.25, 0.5, 0.75, 0.85, 0.9, 0.95, 0.97, 0.99, 0.999],
                                 weight, "W_eight")
-            H_C_Percentile = calculate_percentile_from_table('C:\\Users\\munya\Downloads\\Who boys percentile charts\\hcfa-boys-percentiles-expanded-tables.xlsx','hcfa_boys_p_exp', self.age_in_days,
+            H_C_Percentile = calculate_percentile_from_table('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\New folder\\Who charts\\Boys percentile tables.xlsx','Boys_HC_Age', self.age_in_days,
                                 [0.001, 0.01, 0.03, 0.05, 0.1, 0.15, 0.25, 0.5, 0.75, 0.85, 0.9, 0.95, 0.97, 0.99, 0.999],
                                 head_circumference, "H_C")
-            
+             # Call function to calculate using girls tables
         elif self.ids.female_button.state == 'down':
             h_eight_percentile = calculate_percentile_from_table('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\New folder\\Who charts\\Girls percentile tables.xlsx','Girls_Height_Age',  self.age_in_days, 
                                 [0.001, 0.01, 0.03, 0.05, 0.1, 0.15, 0.25, 0.5, 0.75, 0.85, 0.9, 0.95, 0.97, 0.99, 0.999],
@@ -198,7 +199,7 @@ class ResultScreen(Screen):
     head_circumference_label_text = StringProperty("")
     weight_label_text = StringProperty("")
     height_label_text = StringProperty("")
-    age_label_text = StringProperty("")  # Define the age_label_text attribute as a StringProperty with an initial value of ""
+    age_label_text = StringProperty("") 
     gender_label_text = StringProperty("")
     height_percentile_text = StringProperty("")
     weight_percentile_text = StringProperty("")
@@ -256,17 +257,19 @@ class ChartScreen(Screen):
         weight = main_screen.ids.weight_input.text
         HC = main_screen.ids.head_circumference_input.text
 
+
+        #For gumi to edit just replace file path with that of the excel file for plotting
         if male_button.state == 'down':
            
-            height_plot = plot_growth_chart('C:\\Users\\munya\\Downloads\\lhfa-boys-zscore-expanded-tables.xlsx', 'LFA_boys_z_exp',Age,float(height), 'height', ' Boy ')
-            weight_plot = plot_growth_chart('C:\\Users\\munya\\Downloads\\wfa-boys-zscore-expanded-tables (1).xlsx', 'WFA_boys_z_exp',Age,float(weight), 'Weight', ' Boy ')
-            HC_plot = plot_growth_chart('C:\\Users\\munya\\Downloads\\hcfa-boys-zscore-expanded-tables.xlsx', 'HCFA_boys_z_exp',Age,float(HC), 'Head Cirumference', ' Boy ')
+            height_plot = plot_growth_chart('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\New folder\\Who charts\\plotting_charts_boys.xlsx', 'lhfa_boys_p_exp',Age,float(height), 'height', ' Boy ')
+            weight_plot = plot_growth_chart('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\New folder\\Who charts\\plotting_charts_boys.xlsx', 'WFA_boys_z_exp',Age,float(weight), 'Weight', ' Boy ')
+            HC_plot = plot_growth_chart('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\New folder\\Who charts\\plotting_charts_boys.xlsx', 'HCFA_boys_z_exp',Age,float(HC), 'Head Cirumference', ' Boy ')
 
         elif female_button.state == 'down':
             
-            height_plot = plot_growth_chart('C:\\Users\\munya\\Downloads\\lhfa-girls-zscore-expanded-tables (1).xlsx', 'LFA_girls_z_exp',Age,float(height), 'height', ' Girl ')
-            weight_plot = plot_growth_chart('C:\\Users\\munya\\Downloads\\lhfa-girls-zscore-expanded-tables (1).xlsx', 'WFA_girls',Age,float(weight), 'Weight', ' Girl ')
-            HC_plot = plot_growth_chart('C:\\Users\\munya\\Downloads\\lhfa-girls-zscore-expanded-tables (1).xlsx', 'HCFA_girls',Age,float(HC), 'Head Cirumference', ' Girl ')
+            height_plot = plot_growth_chart('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\New folder\\Who charts\\plotting_chart_girls.xlsx', 'LFA_girls_z_exp',Age,float(height), 'height', ' Girl ')
+            weight_plot = plot_growth_chart('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\New folder\\Who charts\\plotting_chart_girls.xlsx', 'WFA_girls',Age,float(weight), 'Weight', ' Girl ')
+            HC_plot = plot_growth_chart('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\New folder\\Who charts\\plotting_chart_girls.xlsx', 'HCFA_girls',Age,float(HC), 'Head Cirumference', ' Girl ')
 
         chart_box1 = self.ids.box1 # Reference to the BoxLayout for Chart 1
         chart_box1.clear_widgets()  # Clear existing widgets in the box
@@ -289,9 +292,9 @@ class WindowManager(ScreenManager):
         self.add_widget(ChartScreen(name='charts_screen'))
         self.current = "main_screen"
        
-
+# also for Gumi to edit just change this for the path of the file with the .kv extension
 # Designate Our .kv design file
-kv = Builder.load_file('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\Kivy\\Paeds\\gre.kv')
+kv = Builder.load_file('C:\\Users\\munya\\OneDrive\\Desktop\\coding stuff\\Kivy\\Paeds\\grow.kv')
 
 class growth(App):
     def build(self):
