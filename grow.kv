@@ -1,0 +1,207 @@
+WindowManager:
+
+    #MainScreen:
+    #ResultScreen:
+
+<MainScreen>:
+    name: "main_screen"
+    dob:dob
+    height_input:height_input
+    weight_input:weight_input
+    head_circumference_input:head_circumference_input
+
+    male_selected: True # BooleanProperty to track Male toggle button state
+    female_selected: False # BooleanProperty to track Female toggle button state
+
+
+    GridLayout:
+        cols:1
+        size_hint: 1, 1
+       
+        GridLayout:
+            cols: 2
+
+            Label:
+                text: "Date of Birth:"
+            TextInput:
+                id: dob
+                hint_text: "YYYYMMDD"
+                multiline:False
+                input_mode:'numeric'
+                   
+            Label:
+                text: "Height:"
+            TextInput:
+                id: height_input
+                name: "height_input"
+                hint_text: "cm"
+                multiline:False
+                input_mode: 'numeric' 
+
+            Label:
+                text: "Weight:"
+            TextInput:
+                id: weight_input
+                hint_text: "kg"
+                multiline:False
+                input_mode: 'numeric'
+
+            Label:
+                text: "Head Circumference:"
+            TextInput:
+                id: head_circumference_input
+                hint_text: "cm"
+                multiline:False
+                input_mode: 'numeric'
+
+            ToggleButton:
+                id: male_button
+                text: "Male"
+                group: "gender"
+                state: "down" if root.male_selected else "normal" # Bind to male_selected property
+                on_release:
+                    root.male_selected = self.state == "down" # Update male_selected property
+            
+            ToggleButton:
+                id: female_button
+                text: "Female"
+                group: "gender"
+                state: "down" if root.female_selected else "normal" # Bind to female_selected property
+                on_release:
+                    root.female_selected = self.state == "down" # Update female_selected property
+                background_color: "#ED11A2" if self.state == "down" else "#6e6d6d"
+                on_state:
+                    if self.state == "down":self.background_down = "#6e6d6d" #"#52524F" # pink glow when pressed
+                    else:self.background_down = "#ED11A2" # restore pink background color
+
+        Button:
+            text: "Calculate Age"
+            on_release:
+                root.press()
+                root.print_toggle_state()
+                root.manager.transition.direction = "left"
+            
+
+<ResultScreen>:
+    name: "result_screen"
+
+   
+    GridLayout:
+        cols: 1
+        size_hint: 1, 0.9
+        padding: 10
+        spacing: 10
+
+        Button:
+            text: 'Back'
+            font_size: 20
+            size_hint_y: 0.1
+            on_release: 
+                app.root.current = "main_screen"
+                root.manager.transition.direction = "right"
+
+        GridLayout:
+            cols: 2
+            size_hint_y: 0.1
+
+            Button:
+                text: 'Reset'
+                font_size: 20
+                #size_hint_y: 0.1
+                on_release:
+                    app.root.current = "main_screen"
+                    root.manager.transition.direction = "down"
+                    on_press: root.reset() 
+
+            Button:
+                text: 'Charts'
+                font_size: 20
+                #size_hint_y: 0.1
+                on_release:
+                    app.root.current = "charts_screen"
+                 
+                            
+
+        GridLayout:
+            cols: 3
+                        
+            Label:
+                text: "Age"
+            Label:
+                id: age_label
+                text: root.age_label_text
+            Label:
+                id:gender_label
+                text: root.gender_label_text
+
+
+            Label:
+                text: "Height"
+            Label:
+                id: height_label
+                text: root.height_label_text
+            Label:
+                id:height_percentile
+                text: root.height_percentile_text
+
+            Label:
+                text: "Weight"
+            Label:
+                id: weight_label
+                text: root.weight_label_text 
+            Label:
+                id:weight_percentile
+                text: root.weight_percentile_text
+
+            Label:
+                text: "Head Circumference"
+            Label:
+                id: head_circumference_label
+                text: root.head_circumference_label_text
+            Label:
+                id: Head_circumference_percentile
+                text: root.head_circumference_percentile_text
+
+<ChartScreen>:
+    name: "charts_screen"
+
+    BoxLayout:
+        orientation: "vertical"
+
+        TabbedPanel:
+            do_default_tab: False
+
+            TabbedPanelItem:
+                text: "Height_A"
+
+                BoxLayout:
+                    id: box1
+                    size_hint_y: 1
+                    pos_hint: {"top":1}
+
+            TabbedPanelItem:
+                text: "Weight_A"
+
+                BoxLayout:
+                    id: box2
+                    size_hint_y: 1
+                    pos_hint: {"top":1}
+            
+            TabbedPanelItem:
+                text: "HC_A"
+
+                BoxLayout:
+                    id: box3
+                    size_hint_y: 1
+                    pos_hint: {"top":1}
+
+        BoxLayout:
+            size_hint_y:0.2
+            TextInput:
+                id: namer
+                multiline:True
+
+            Button:
+                text: "Press me"
+                on_release: app.root.current = "result_screen"
+
